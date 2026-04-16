@@ -7,7 +7,7 @@ import crypto from "crypto";
 
 
 
-const ACCESS_TOKEN_TTL = '30m'
+const ACCESS_TOKEN_TTL = '15s'
 const REFRESH_TOKEN_TTL = 14 * 24 * 60 *60* 1000; //14 day
 export const signUp = async (req,res) =>{
     try {
@@ -88,7 +88,7 @@ export const signIn = async (req,res) =>{
         res.cookie('refreshToken', refreshToken, {
             httpOnly:true,
             secure: true,
-            samSite: 'none',
+            sameSite: 'none',
             maxAge: REFRESH_TOKEN_TTL
         })
 
@@ -108,7 +108,7 @@ export const signOut = async (req, res)=>{
     try {
         // lấy refresh token từ cookie
         const token = req.cookies?.refreshToken;
-        if(!token){
+        if(token){
         // xóa refresh token trong session
         await Session.deleteOne({refreshToken: token})
 
@@ -123,4 +123,47 @@ export const signOut = async (req, res)=>{
 
 
 }
+
+
+export const  refreshToken = async (req, res) =>{
+
+        try {
+
+            // lấy refresh token từ cookie
+            const token = req.cookies?.refreshToken;
+            if(!token){
+                return res.status(401).json({message:"Token không tồn tại"})
+            }
+
+            // so sánh với refresh token trong database
+            const session = await Session.findOne({refreshToken:token});
+
+            if(!session){
+                return res.status(403).json({message:"Token không hợp lệ hoặc hết hạn sử dụng"})
+            }
+
+            // kiểm tra hết hạn chưa
+            if(session.expiresAt < new Date()){
+                    return res.status(403).json({message:"Token đã hết hạn"})
+            }
+
+            
+            // tạo access token mới
+            const accessToken = jwt.sign({
+                userId: session.userId,
+
+            } , process.env.ACCESS_TOKEN_SECRET, {expiresIn:ACCESS_TOKEN_TTL})
+
+
+            //return
+            return res.status(200).json({accessToken})
+            
+        } catch (error) {
+            console.error("Lỗi khi gọi refreshToken", error)
+            return res.status(500).json({message:"Lỗi hệ thống"})
+        }
+
+}
+
+
 

@@ -6,10 +6,12 @@ import { Button } from "../ui/button.tsx"
 import {z} from 'zod'
 import {useForm} from 'react-hook-form'
 import { zodResolver} from '@hookform/resolvers/zod'
+import { useAuthStore } from "../../stores/useAuthStores.ts"
+import { useNavigate } from "react-router"
 
 
 const signInSchema = z.object({
-  username : z.string().min(3, 'Tên đăng nhập phải có ít nhất 3 kí tự'),
+  userName : z.string().min(3, 'Tên đăng nhập phải có ít nhất 3 kí tự'),
   password : z.string().min(6, "PassWord phải có ít nhất 6 kí tự")
 
 })
@@ -20,13 +22,17 @@ export function SignInForm({
   className,
   ...props
 }: React.ComponentProps<"div">)
-{
+{     
+      const {signIn} = useAuthStore();
+      const navigate = useNavigate();
       const {register, handleSubmit, formState:{errors, isSubmitting}}     = useForm<SignInFormValues>({
         resolver:zodResolver(signInSchema)
       })
     
       const onSubmit = async (data:SignInFormValues) =>{
-    
+        const { userName, password } = data;
+        await signIn(userName, password);
+        navigate("/");
       }
       return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -56,20 +62,20 @@ export function SignInForm({
               {/* username */}
               <div className="flex flex-col gap-3">
                 <Label
-                  htmlFor="username"
+                  htmlFor="userName"
                   className="block text-sm"
                 >
                   Tên đăng nhập
                 </Label>
                 <Input
                   type="text"
-                  id="username"
+                  id="userName"
                   placeholder="moji"
-                 {...register("username")}
+                 {...register("userName")}
                 />
-                {errors.username && (
+                {errors.userName && (
                     <p className="text-destructive text-sm">
-                      {errors.username.message}
+                      {errors.userName.message}
                     </p>
                   )}           
               </div>

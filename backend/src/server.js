@@ -5,6 +5,7 @@ import authRoute from './routes/authRoute.js'
 import userRoute from './routes/userRoute.js'
 import cookieParser from 'cookie-parser'
 import { protectedRoute } from './middlewares/authMiddleware.js';
+import cors from "cors";
 
 dotenv.config({ quiet: true }); // load cac bien moi truong
 
@@ -15,6 +16,7 @@ const PORT = process.env.PORT  || 5001  // khai bao cong
 // middlewares
 app.use(express.json()); //giup express doc request duoi dang json
 app.use(cookieParser())
+app.use(cors({origin: process.env.CLIENT_URL, credentials:true}))
 // public routes
 app.use('/api/auth', authRoute)
 
