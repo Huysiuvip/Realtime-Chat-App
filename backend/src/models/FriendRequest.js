@@ -12,7 +12,7 @@ const friendRequestSchema = new mongoose.Schema({
         ref : 'User',
         required : true
     },
-    massage:{
+    message:{
         type : String,
         maxlength : 300,
     }
