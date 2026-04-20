@@ -33,7 +33,7 @@ export const signUp = async (req,res) =>{
             userName, 
             hashedPassword,
             email,
-            displayName : `${firstName} ${lastName}`
+            displayName : ` ${lastName} ${firstName}`
         })
 
         //return
