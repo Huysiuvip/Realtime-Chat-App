@@ -1,12 +1,13 @@
 import { useAuthStore } from '@/stores/useAuthStores';
 import { useChatStore } from '@/stores/useChatStore';
 import type { Conversation } from '@/types/chat'
-import React from 'react'
 import ChatCard from './ChatCard';
+import UnreadCountBadge from './UnreadCountBadge';
+import GroupChatAvatar from './GroupChatAvatar';
 
 const GroupChatCard = ({convo} : {convo : Conversation}) => {
     const {user} = useAuthStore();
-    const {activeConversationId, setActiveConversation, message} = useChatStore();
+    const {activeConversationId, setActiveConversation, messages} = useChatStore();
 
      if(!user) return null;
 
@@ -15,7 +16,7 @@ const GroupChatCard = ({convo} : {convo : Conversation}) => {
 
     const handleSelectConversation = async (id :string) =>{
         setActiveConversation(id);
-        if(!message[id]){
+        if(!messages[id]){
             // todo: fetch message
         }
     }
@@ -33,13 +34,16 @@ const GroupChatCard = ({convo} : {convo : Conversation}) => {
   unreadCount={unreadCount}
   leftSection = {
     <>
-    {/*todo: group avatar  */}
-   
+    {/* group avatar  */}
+    {unreadCount > 0 && <UnreadCountBadge unreadCount={unreadCount}/>}
+    <GroupChatAvatar participants={convo.participants} type='chat'/>
+      
+    
     </>
   }
   subtitle={
     <p className="text-sm truncate text-muted-foreground">
-        {convo.participants.length}
+        {convo.participants.length} thành viên
     </p>
   }
   

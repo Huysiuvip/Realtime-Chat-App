@@ -39,7 +39,7 @@ export interface ThemeState {
 
 export interface ChatState {
   conversations: Conversation[];
-  message: Record<string, {
+  messages: Record<string, {
     items: Message[],
     hasMore: boolean,  // sử lý infinite-scroll
     nextCursor: string | null, // phân trang

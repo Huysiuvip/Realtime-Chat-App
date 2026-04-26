@@ -34,7 +34,7 @@ export const sendDirectMessage = async (req, res) => {
         const message = await Message.create({
             conversationId : conversation._id,
             senderId,
-            content
+            content,       
         });
 
         updateConversationAfterCreateMessage(conversation, message, senderId);

@@ -22,7 +22,7 @@ const groupSchema = new mongoose.Schema({
         trim : true
     }, 
    
-    createBy :{
+    createdBy :{
         type : mongoose.Schema.Types.ObjectId,
         ref :'User'
     }
@@ -42,9 +42,9 @@ const lastMessageSchema = new mongoose.Schema({
         type : mongoose.Schema.Types.ObjectId,
         ref : 'User'
     },
-    createAt:{
+    createdAt:{
         type : Date,
-        default: null
+        default: Date.now
     }
 
 }, { _id: false})

@@ -1,7 +1,11 @@
 
+
 const CreateNewChat = () => {
   return (
-    <div>CreateNewChat</div>
+   <>
+      <div>CreateNewChat</div>
+      
+   </>
   )
 }
 

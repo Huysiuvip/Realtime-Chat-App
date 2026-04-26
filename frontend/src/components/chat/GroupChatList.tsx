@@ -1,4 +1,3 @@
-import React from 'react'
 import { useChatStore } from '@/stores/useChatStore'
 import GroupChatCard from './GroupChatCard';
 
@@ -10,7 +9,7 @@ const GroupChatList = () => {
   return (
    <div className='flex-1 overflow-y-auto p-2 space-y-2'>
       {
-        groupChats.map((convo) =>(<GroupChatCard convo={convo}/>))
+        groupChats.map((convo) =>(<GroupChatCard convo={convo} key={convo._id}/>))
       }
     </div>
   )

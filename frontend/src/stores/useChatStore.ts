@@ -7,23 +7,27 @@ export const useChatStore = create<ChatState>()(
     persist(
         (set, get) =>({
             conversations : [],
-            message :{},
+            messages :{},
             activeConversationId : null,
             loading: false,
 
             setActiveConversation : (id) => set({activeConversationId: id}),
 
-            reset : () =>({
-                conversations : [],
-                message :{},
-                activeConversationId : null,
-                loading: false,
-            }),
+            reset: () => {
+        set({
+          conversations: [],
+          messages: {},
+          activeConversationId: null,
+           loading: false,
+
+        });
+      },
 
             fetchConversations : async () =>{
                 try {
                     set({loading : true}); // đang tải dữ liệu
                     const {conversations} = await chatService.fetchConversation()
+                    console.log(conversations)
 
                     set({conversations, loading : false})
                 } catch (error) {
@@ -35,7 +39,7 @@ export const useChatStore = create<ChatState>()(
         }),
         {
         name: "chat-storage",
-        partialize : (state) =>({conversations : state.conversations})
+      partialize: (state) => ({ conversations: state.conversations }),
     }
     )
     
