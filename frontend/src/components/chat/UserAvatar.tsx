@@ -15,7 +15,7 @@ const UserAvatar = ({type, name, avatarUrl, className} : IUserAvatarProps) => {
     if(!name){
         name = "Moji";      
     }
-    console.log(name)
+    
 
   return (
     <Avatar className={cn(className ?? "",
