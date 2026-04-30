@@ -1,3 +1,4 @@
+import type { Socket } from "socket.io-client";
 import type { Conversation, Message } from "./chat";
 import type { User } from "./user";
 
@@ -62,3 +63,8 @@ export interface ChatState {
 
 }
 
+export interface SocketState {
+  socket: Socket | null;
+  connectSocket: () => void;
+  disconnectSocket: () => void;
+}

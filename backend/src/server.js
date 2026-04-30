@@ -8,12 +8,13 @@ import messageRoute from './routes/messageRoute.js'
 import conversationRoute from './routes/conversationRoute.js'
 import cookieParser from 'cookie-parser'
 import { protectedRoute } from './middlewares/authMiddleware.js';
+import {app, server} from './socket/index.js'
 
 import cors from "cors";
 
 dotenv.config({ quiet: true }); // load cac bien moi truong
 
-const app = express();  //khoi tao app bang express
+// const app = express();  //khoi tao app bang express
 const PORT = process.env.PORT  || 5001  // khai bao cong
 
 
@@ -37,7 +38,7 @@ app.use('/api/conversations', conversationRoute)
 
 connectDB().then(() =>{
     // chay cong
-app.listen(PORT, () =>{
+server.listen(PORT, () =>{
     console.log(`sever bat dau tren cong http://localhost:${PORT}`)
 })
 });
