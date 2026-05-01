@@ -17,11 +17,21 @@ const io = new Server(server, {
 
 io.use(socketAuthMiddleware);
 
+const onlineUsers = new Map();
+
 io.on("connection", async (socket) =>{
     const user = socket.user;
     console.log(`${user.displayName} online with ${socket.id}`);
+    // thêm user vào danh sách online
+    onlineUsers.set(user._id, socket.id);
+    // thông báo cho client có người online
+    io.emit("online-users", Array.from(onlineUsers.keys()))
     
     socket.on('disconnect', () =>{
+        // xóa user
+        onlineUsers.delete(user._id);
+        // cập nhật lại danh sách user
+        io.emit("online-users", Array.from(onlineUsers.keys()))
         console.log(`socket disconnect : ${socket.id}`);
     })
 })
