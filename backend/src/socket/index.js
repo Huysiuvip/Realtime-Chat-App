@@ -2,6 +2,7 @@ import {Server} from 'socket.io';
 import http from 'http';
 import express from 'express';
 import { socketAuthMiddleware } from '../middlewares/socketMiddleware.js';
+import { getUserConversationForSocketIo } from '../controllers/conversationController.js';
 
 
 const app = express();
@@ -26,6 +27,12 @@ io.on("connection", async (socket) =>{
     onlineUsers.set(user._id, socket.id);
     // thông báo cho client có người online
     io.emit("online-users", Array.from(onlineUsers.keys()))
+
+    // lấy danh sách id của 1 conversation
+    const conversationIds = await getUserConversationForSocketIo(user._id);
+    conversationIds.forEach((id) => {
+        socket.join(id);
+    });
     
     socket.on('disconnect', () =>{
         // xóa user
