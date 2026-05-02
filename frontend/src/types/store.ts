@@ -61,16 +61,18 @@ export interface ChatState {
   sendGroupMessage: (conversationId: string, content: string, imgUrl?: string) => Promise<void>;
 
   //add message
-  addMessage : (message : Message) => Promise<void>;
+  addMessage: (message: Message) => Promise<void>;
   // update convo
-  updateConversation : ( conversation : Conversation) => void;
+  updateConversation: (conversation: unknown) => void;
+
+  markAsSeen: () => Promise<void>
 
 
 }
 
 export interface SocketState {
   socket: Socket | null;
-  onlineUsers : string [];
+  onlineUsers: string[];
   connectSocket: () => void;
   disconnectSocket: () => void;
 }

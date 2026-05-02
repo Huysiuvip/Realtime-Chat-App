@@ -51,7 +51,7 @@ const MessageItems = ({message, index, messages, selectedConvo, lastMessageStatu
                     lastMessageStatus === 'seen' ?'bg-primary/20 text-primary' :
                     'bg-muted text-muted-foreground'
                 )}>
-
+                    {lastMessageStatus}
                 </Badge>
             )}
         </div>
