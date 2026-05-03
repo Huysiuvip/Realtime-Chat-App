@@ -54,7 +54,7 @@ export const useChatStore = create<ChatState>()(
 
                 set({ messageLoading: true })
                 try {
-                    const { messages: fetched, cursor } = await chatService.fetchMessage(convoId, nextCursor);
+                    const { messages: fetched, cursor } = await chatService.fetchMessages(convoId, nextCursor);
 
                     const processed = fetched.map((m) => ({
                         ...m,
@@ -152,7 +152,7 @@ export const useChatStore = create<ChatState>()(
                 }
             },
 
-            updateConversation: (conversation) => {
+            updateConversation: (conversation : any) => {
                 set((state) => ({
                     conversations: state.conversations.map((c) =>
                         c._id === conversation._id ? { ...c, ...conversation } : c

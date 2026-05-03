@@ -14,7 +14,6 @@ const ChatWindowHeader = ({chat} : {chat? : Conversation}) => {
   const  {user} = useAuthStore();
   const {onlineUsers} = useSocketStore();
   let otherUser;
-  console.log(onlineUsers)
 
   chat = chat ?? conversations.find((c) => c._id === activeConversationId);
 

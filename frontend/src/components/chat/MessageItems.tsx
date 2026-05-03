@@ -14,7 +14,7 @@ interface MessageItemsProps {
     lastMessageStatus :"delivered" | 'seen'
 }
 const MessageItems = ({message, index, messages, selectedConvo, lastMessageStatus} : MessageItemsProps) => {
-    const prev = messages[index-1];
+    const prev = index + 1 < messages.length ? messages[index + 1] : undefined;
 
     const isShowTime =
     index === 0 ||

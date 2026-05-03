@@ -149,7 +149,7 @@ export const getMessages = async (req, res) =>{
         let nextCursor = null;
         
         if(message.length > Number(limit)){
-            const nextMessage = message[message,length -1];
+            const nextMessage = message[message.length -1];
             nextCursor = nextMessage.createdAt.toISOString();
             message.pop();
         }
