@@ -229,14 +229,20 @@
 
   /* Chat bubble variants */
   .chat-bubble-sent {
-    @apply bg-primary/80! text-[hsl(var(--chat-bubble-sent-foreground))]! [box-shadow:var(--shadow-bubble)]
-;
+    @apply bg-primary/80! text-[hsl(var(--chat-bubble-sent-foreground))]! [box-shadow:var(--shadow-bubble)];
   }
+
 
   .chat-bubble-received {
     @apply bg-[hsl(var(--chat-bubble-received))] text-[hsl(var(--chat-bubble-received-foreground))] border border-border/50;
   }
 
+  .error-message{
+    @apply text-sm text-destructive
+  }
+  .success-message{
+    @apply text-sm text-green-500
+  }
   /* Status indicators */
   .status-online {
     @apply bg-[hsl(var(--online))] shadow-[0_0_8px_hsl(var(--online)/0.5)];

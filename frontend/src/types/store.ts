@@ -67,7 +67,6 @@ export interface ChatState {
 
   markAsSeen: () => Promise<void>
 
-
 }
 
 export interface SocketState {
@@ -75,4 +74,10 @@ export interface SocketState {
   onlineUsers: string[];
   connectSocket: () => void;
   disconnectSocket: () => void;
+}
+
+export interface FriendState {
+  loading : boolean;
+  searchByUserName: (userName:string) => Promise<User | null>;
+  addFriend : (to:string, message?: string) => Promise<string>;
 }
