@@ -1,11 +1,10 @@
 import friendService from "@/services/friendService";
 import type { FriendState } from "@/types/store";
-import { fr } from "zod/v4/locales";
 import { create } from 'zustand';
 
 
 export const useFriendStore = create<FriendState>((set, get) => ({
-
+    friends: [],
     loading: false,
     receivedList: [],
     sentList: [],
@@ -64,10 +63,11 @@ export const useFriendStore = create<FriendState>((set, get) => ({
             }))
         } catch (error) {
             console.error("Lỗi khi acceptRequests");
-        }finally {
+        } finally {
             set({ loading: false })
         }
     },
+
     declineRequest: async (requestId) => {
         try {
             set({ loading: true });
@@ -79,7 +79,21 @@ export const useFriendStore = create<FriendState>((set, get) => ({
             }))
         } catch (error) {
             console.error("Lỗi khi declineRequest");
-        }finally {
+        } finally {
+            set({ loading: false })
+        }
+    },
+
+    getFriends: async () => {
+        try {
+            set({ loading: true })
+            const friends = await friendService.getFriendList();
+            set({ friends: friends })
+
+        } catch (error) {
+            console.log("Lỗi khi getFriends")
+            set({friends : []})
+        } finally {
             set({ loading: false })
         }
     }

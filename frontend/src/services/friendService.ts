@@ -40,6 +40,10 @@ const friendService = {
         }
     },
     
+    async getFriendList (){
+        const res = await api.get("/friends");
+        return res.data.friends;
+    }
 }
 
 

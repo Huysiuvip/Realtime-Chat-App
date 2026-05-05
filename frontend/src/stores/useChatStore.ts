@@ -3,6 +3,7 @@ import type { ChatState } from "@/types/store";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { useAuthStore } from "./useAuthStores";
+import { useSocketStore } from "./useSocketStore";
 
 export const useChatStore = create<ChatState>()(
     persist(
@@ -152,7 +153,7 @@ export const useChatStore = create<ChatState>()(
                 }
             },
 
-            updateConversation: (conversation : any) => {
+            updateConversation: (conversation: any) => {
                 set((state) => ({
                     conversations: state.conversations.map((c) =>
                         c._id === conversation._id ? { ...c, ...conversation } : c
@@ -162,18 +163,18 @@ export const useChatStore = create<ChatState>()(
 
             markAsSeen: async () => {
                 try {
-                    const {user} = useAuthStore.getState();
-                    const {activeConversationId, conversations} = get();
+                    const { user } = useAuthStore.getState();
+                    const { activeConversationId, conversations } = get();
 
-                    if(!activeConversationId || !user) {
+                    if (!activeConversationId || !user) {
                         return;
                     }
 
                     const convo = conversations.find((c) => c._id === activeConversationId);
 
-                    if(!convo) return;
+                    if (!convo) return;
 
-                    if((convo.unreadCounts?.[user._id] ?? 0)=== 0) {
+                    if ((convo.unreadCounts?.[user._id] ?? 0) === 0) {
                         return;
                     }
 
@@ -181,20 +182,42 @@ export const useChatStore = create<ChatState>()(
 
                     set((state) => ({
                         conversations: state.conversations.map((c) =>
-                        c._id === activeConversationId && c.lastMessage
-                            ? {
-                                ...c,
-                                unreadCounts: {
-                                ...c.unreadCounts,
-                                [user._id]: 0,
-                                },
-                            }
-                            : c
+                            c._id === activeConversationId && c.lastMessage
+                                ? {
+                                    ...c,
+                                    unreadCounts: {
+                                        ...c.unreadCounts,
+                                        [user._id]: 0,
+                                    },
+                                }
+                                : c
                         ),
                     }));
 
                 } catch (error) {
                     console.error('Lỗi xảy ra khi gọi markAsSeen trong store', error)
+                }
+            },
+
+            addConvo: (convo) => {
+                // kiểm tra convo tồn tại hay chưa
+                set((state) => {
+                    const exists = state.conversations.some((c) => c._id.toString() === convo._id.toString())
+                    return {
+                        conversations: exists ? state.conversations : [convo, ...state.conversations],
+                        activeConversationId: convo._id
+                    }
+                })
+            },
+
+            createConversation: async (type, name, memberIds) => {
+                try {
+                    const conversation = await chatService.createConversation(type, name, memberIds);
+                    get().addConvo(conversation);
+
+                    useSocketStore.getState().socket?.emit("join-conversation", conversation._id)
+                } catch (error) {
+                    console.error("Lỗi xảy ra khi gọi createConversation trong store")
                 }
             }
         }),
