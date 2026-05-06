@@ -65,16 +65,22 @@ export const useSocketStore = create<SocketState>((set, get) => ({
         });
 
         // read message
-        socket.on("read-message", ({conversation, lastMessage}) =>{
-            const updated ={
-                _id : conversation._id,
+        socket.on("read-message", ({ conversation, lastMessage }) => {
+            const updated = {
+                _id: conversation._id,
                 lastMessage,
-                lastMessageAt : conversation.lastMessageAt,
-                unreadCounts : conversation.unreadCounts,
-                seenBy : conversation.seenBy,
+                lastMessageAt: conversation.lastMessageAt,
+                unreadCounts: conversation.unreadCounts,
+                seenBy: conversation.seenBy,
             };
 
             useChatStore.getState().updateConversation(updated);
+        });
+
+        // new group chat
+        socket.on('new-group', (conversation) => {
+            useChatStore.getState().addConvo(conversation)
+            socket.emit('join-conversation', conversation._id)
         })
     },
 
