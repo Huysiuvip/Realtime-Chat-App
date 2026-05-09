@@ -9,6 +9,7 @@ import conversationRoute from './routes/conversationRoute.js'
 import cookieParser from 'cookie-parser'
 import { protectedRoute } from './middlewares/authMiddleware.js';
 import {app, server} from './socket/index.js'
+import { v2 as cloudinary } from 'cloudinary';
 
 import cors from "cors";
 
@@ -24,6 +25,14 @@ app.use(cookieParser())
 app.use(cors({origin: process.env.CLIENT_URL, credentials:true}))
 // public routes
 app.use('/api/auth', authRoute)
+
+
+// CLOUDINARY Configuration
+    cloudinary.config({ 
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET
+    });
 
 
 //private routes
